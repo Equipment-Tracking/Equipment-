@@ -30,6 +30,9 @@
     button:hover {
       background-color: #0056b3;
     }
+    #status {
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
@@ -54,7 +57,7 @@
     const status = document.getElementById('status');
 
     form.addEventListener('submit', async (event) => {
-      event.preventDefault(); // Prevent form submission
+      event.preventDefault(); // Prevent default form submission
 
       const formData = {
         to: document.getElementById('to').value,

@@ -1,74 +1,58 @@
-import React, { useState } from "react";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Send Email with Nodemailer</title>
+</head>
+<body>
+  <h1>Send Email</h1>
+  <form id="email-form">
+    <label for="to">Recipient Email:</label>
+    <input type="email" id="to" name="to" required><br><br>
 
-function App() {
-  const [tasks, setTasks] = useState([]); // State to store tasks
-  const [task, setTask] = useState(""); // State for input field
+    <label for="subject">Subject:</label>
+    <input type="text" id="subject" name="subject" required><br><br>
 
-  // Function to handle adding a new task
-  const addTask = () => {
-    if (task.trim() !== "") {
-      setTasks
+    <label for="message">Message:</label><br>
+    <textarea id="message" name="message" rows="5" required></textarea><br><br>
 
-```jsx
-([...tasks, task.trim()]); // Add the new task to the list
-      setTask(""); // Clear the input field
-    }
-  };
+    <button type="submit">Send Email</button>
+  </form>
 
-  return (
-    <div style={{ textAlign: "center", marginTop: "50px" }}>
-      <h1>React To-Do App</h1>
+  <p id="status"></p>
 
-      {/* Input for adding tasks */}
-      <div>
-        <input
-          type="text"
-          placeholder="Enter a task"
-          value={task}
-          onChange={(e) => setTask(e.target.value)}
-          style={{
-            padding: "10px",
-            width: "300px",
-            fontSize: "16px",
-            marginRight: "10px",
-          }}
-        />
-        <button
-          onClick={addTask}
-          style={{
-            padding: "10px 20px",
-            fontSize: "16px",
-            backgroundColor: "#007BFF",
-            color: "#fff",
-            border: "none",
-            cursor: "pointer",
-          }}
-        >
-          Add Task
-        </button>
-      </div>
+  <script>
+    const form = document.getElementById('email-form');
+    const status = document.getElementById('status');
 
-      {/* Task list */}
-      <ul style={{ listStyleType: "none", padding: "20px", marginTop: "20px" }}>
-        {tasks.map((t, index) => (
-          <li
-            key={index}
-            style={{
-              padding: "10px",
-              border: "1px solid #ddd",
-              marginBottom: "10px",
-              borderRadius: "5px",
-              textAlign: "left",
-              maxWidth: "400px",
-              margin: "10px auto",
-            }}
-          >
-            {t}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-}
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault(); // Prevent default form submission
 
-export default App;
+      const formData = {
+        to: document.getElementById('to').value,
+        subject: document.getElementById('subject').value,
+        message: document.getElementById('message').value,
+      };
+
+      try {
+        const response = await fetch('/send-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData),
+        });
+
+        if (response.ok) {
+          status.textContent = 'Email sent successfully!';
+          form.reset(); // Reset the form
+        } else {
+          status.textContent = 'Failed to send email. Please try again.';
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        status.textContent = 'An error occurred while sending the email.';
+      }
+    });
+  </script>
+</body>
+</html>

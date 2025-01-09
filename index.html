@@ -3,19 +3,46 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Send Email with Nodemailer</title>
+  <title>Send Email</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      padding: 20px;
+    }
+    form {
+      max-width: 400px;
+      margin: auto;
+    }
+    input, textarea, button {
+      display: block;
+      width: 100%;
+      margin-bottom: 15px;
+      padding: 10px;
+      font-size: 1rem;
+    }
+    button {
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
 </head>
 <body>
   <h1>Send Email</h1>
   <form id="email-form">
     <label for="to">Recipient Email:</label>
-    <input type="email" id="to" name="to" required><br><br>
+    <input type="email" id="to" name="to" required placeholder="Recipient email">
 
     <label for="subject">Subject:</label>
-    <input type="text" id="subject" name="subject" required><br><br>
+    <input type="text" id="subject" name="subject" required placeholder="Email subject">
 
-    <label for="message">Message:</label><br>
-    <textarea id="message" name="message" rows="5" required></textarea><br><br>
+    <label for="message">Message:</label>
+    <textarea id="message" name="message" rows="5" required placeholder="Your message"></textarea>
 
     <button type="submit">Send Email</button>
   </form>
@@ -27,7 +54,7 @@
     const status = document.getElementById('status');
 
     form.addEventListener('submit', async (event) => {
-      event.preventDefault(); // Prevent default form submission
+      event.preventDefault(); // Prevent form submission
 
       const formData = {
         to: document.getElementById('to').value,
@@ -36,7 +63,7 @@
       };
 
       try {
-        const response = await fetch('/send-email', {
+        const response = await fetch('http://localhost:3000/send-email', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(formData),
@@ -44,13 +71,17 @@
 
         if (response.ok) {
           status.textContent = 'Email sent successfully!';
-          form.reset(); // Reset the form
+          status.style.color = 'green';
+          form.reset(); // Clear the form
         } else {
-          status.textContent = 'Failed to send email. Please try again.';
+          const result = await response.json();
+          status.textContent = `Failed to send email: ${result.error}`;
+          status.style.color = 'red';
         }
       } catch (error) {
         console.error('Error:', error);
-        status.textContent = 'An error occurred while sending the email.';
+        status.textContent = 'An error occurred. Please try again.';
+        status.style.color = 'red';
       }
     });
   </script>

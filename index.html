@@ -1,1 +1,74 @@
+import React, { useState } from "react";
 
+function App() {
+  const [tasks, setTasks] = useState([]); // State to store tasks
+  const [task, setTask] = useState(""); // State for input field
+
+  // Function to handle adding a new task
+  const addTask = () => {
+    if (task.trim() !== "") {
+      setTasks
+
+```jsx
+([...tasks, task.trim()]); // Add the new task to the list
+      setTask(""); // Clear the input field
+    }
+  };
+
+  return (
+    <div style={{ textAlign: "center", marginTop: "50px" }}>
+      <h1>React To-Do App</h1>
+
+      {/* Input for adding tasks */}
+      <div>
+        <input
+          type="text"
+          placeholder="Enter a task"
+          value={task}
+          onChange={(e) => setTask(e.target.value)}
+          style={{
+            padding: "10px",
+            width: "300px",
+            fontSize: "16px",
+            marginRight: "10px",
+          }}
+        />
+        <button
+          onClick={addTask}
+          style={{
+            padding: "10px 20px",
+            fontSize: "16px",
+            backgroundColor: "#007BFF",
+            color: "#fff",
+            border: "none",
+            cursor: "pointer",
+          }}
+        >
+          Add Task
+        </button>
+      </div>
+
+      {/* Task list */}
+      <ul style={{ listStyleType: "none", padding: "20px", marginTop: "20px" }}>
+        {tasks.map((t, index) => (
+          <li
+            key={index}
+            style={{
+              padding: "10px",
+              border: "1px solid #ddd",
+              marginBottom: "10px",
+              borderRadius: "5px",
+              textAlign: "left",
+              maxWidth: "400px",
+              margin: "10px auto",
+            }}
+          >
+            {t}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default App;

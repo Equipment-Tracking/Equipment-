@@ -1,28 +1,45 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8" />
-    <title>Send Email</title>
-  </head>
-  <body>
-    <h1>Send an Email</h1>
-    <form action="/send-email" method="POST">
-      <label for="to">To:</label>
-      <input type="email" id="to" name="to" required />
+<head>
+  <title>EmailJS Example</title>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <script>
+    (function () {
+      emailjs.init("YOUR_USER_ID"); // Replace with your User ID from EmailJS
+    })();
+  </script>
+</head>
+<body>
+  <h1>Send an Email</h1>
+  <form id="contact-form">
+    <label for="name">Name:</label><br />
+    <input type="text" id="name" name="name" required /><br />
+    <label for="email">Email:</label><br />
+    <input type="email" id="email" name="email" required /><br />
+    <label for="message">Message:</label><br />
+    <textarea id="message" name="message" required></textarea><br />
+    <button type="submit">Send Email</button>
+  </form>
 
-      <br /><br />
+  <script>
+    document.getElementById("contact-form").addEventListener("submit", function (event) {
+      event.preventDefault();
 
-      <label for="subject">Subject:</label>
-      <input type="text" id="subject" name="subject" required />
+      const serviceID = "service_46qs5dj"; // Replace with your Service ID
+      const templateID = "template_exfk1bq"; // Replace with your Template ID
 
-      <br /><br />
-
-      <label for="message">Message:</label>
-      <textarea id="message" name="message" rows="5" cols="30" required></textarea>
-
-      <br /><br />
-
-      <button type="submit">Send Email</button>
-    </form>
-  </body>
+      // Send email
+      emailjs
+        .sendForm(serviceID, templateID, this)
+        .then(
+          function (response) {
+            alert("Email sent successfully! " + response.status);
+          },
+          function (error) {
+            alert("Failed to send email. " + error);
+          }
+        );
+    });
+  </script>
+</body>
 </html>
